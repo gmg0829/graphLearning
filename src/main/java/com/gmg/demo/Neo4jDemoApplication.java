@@ -14,14 +14,5 @@ public class Neo4jDemoApplication {
 		SpringApplication.run(Neo4jDemoApplication.class, args);
 	}
 
-	@Autowired
-	private RestTemplateBuilder builder;
-
-	// 使用RestTemplateBuilder来实例化RestTemplate对象，spring默认已经注入了RestTemplateBuilder实例
-	@Bean
-	public RestTemplate restTemplate() {
-		return builder.build();
-	}
-
 }
 
