@@ -4,13 +4,11 @@ import org.neo4j.driver.internal.InternalPath;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Relationship;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author gmg
@@ -19,9 +17,9 @@ import java.util.Map;
  * @description: TODO
  * @date 2019/8/7 16:09
  */
-public class FormatJson {
+public class Neo4jFormat {
 
-    public static Map<String, HashSet<Map<String, Object>>> formatJson( StatementResult result){
+    public static Map<String, HashSet<Map<String, Object>>> formatPath( StatementResult result){
         Map<String, HashSet<Map<String, Object>>> retuMap = new HashMap<String, HashSet<Map<String, Object>>>();
         try  {
             // 存放所有的节点数据
@@ -81,4 +79,26 @@ public class FormatJson {
         }
         return retuMap;
     }
-}
+
+
+        public static  List<Map<String,Object>>  formatSignalNode( List<Record> list) {
+        List<Map<String,Object>> mapList=new ArrayList<>();
+        if (!list.isEmpty()){
+            if (list.size() <= 1){
+               Map<String,Object> map=list.get(0).values().get(0).asNode().asMap();
+               mapList.add(map);
+            }else{
+                for (Record record : list) {
+                    Value value=record.values().get(0);
+                    Node node= value.asNode();
+                    Map<String,Object> map=node.asMap();
+                    mapList.add(map);
+                }
+            }
+
+        }
+        return mapList;
+    }
+
+
+    }

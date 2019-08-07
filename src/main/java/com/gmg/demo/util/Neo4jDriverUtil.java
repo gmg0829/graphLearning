@@ -4,6 +4,7 @@ import org.neo4j.driver.v1.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
@@ -44,6 +45,21 @@ public class Neo4jDriverUtil {
         try {
             Session session = driver.session();
             list = session.run(sql).list();
+            session.close();
+            driver.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static List<Record> runWithParameter(String sql, Map<String,Object> parameter) {
+        Driver driver = Neo4jDriverUtil.getDriver();
+        List<Record> list = null;
+        try {
+            Session session = driver.session();
+            list = session.run(sql,parameter).list();
             session.close();
             driver.close();
 
