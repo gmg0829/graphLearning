@@ -25,6 +25,10 @@ import java.util.Map;
 @RestController
 public class GraphController {
 
+    /**
+     * 获取路径全部（节点和关系）
+     * @return
+     */
     @GetMapping("getPath")
     public Map<String, HashSet<Map<String, Object>>> getPath(){
         StatementResult statementResult= Neo4jDriverUtil
@@ -32,23 +36,42 @@ public class GraphController {
         return Neo4jFormat.formatPath(statementResult);
     }
 
-
-    @GetMapping("getNode")
-    public  List<Map<String,Object>> getNode(String customerId){
+    /**
+     * 获取单个节点
+     * @param customerId
+     * @return
+     */
+    @GetMapping("getSingleNode")
+    public  List<Map<String,Object>> getSingleNode(String customerId){
         Map<String,Object> parameters = Collections.singletonMap( "customerId", customerId);
 
         List<Record> list= Neo4jDriverUtil
                 .runWithParameter("MATCH (a:CCustomer) where a.CUSTOMER_ID=$customerId return a",parameters);
-        return Neo4jFormat.formatSignalNode(list);
+        return Neo4jFormat.formatNode(list);
     }
 
-
+    /**
+     * 获取路径中的所有节点
+     * @return
+     */
     @GetMapping("getPathNode")
         public  List<Map<String,Object>> getPathNode(){
         List<Record> list= Neo4jDriverUtil
                 .run("MATCH (a)-[r]-(b) where a.CUSTOMER_ID='001611094560' and type(r)<>'PAY'  RETURN a,b LIMIT 300");
-        return Neo4jFormat.formatSignalNode(list);
+        return Neo4jFormat.formatNode(list);
     }
+
+    /**
+     * 获取路径中的关系
+     * @return
+     */
+    @GetMapping("getPathRelation")
+    public Map<String, HashSet<Map<String, Object>>> getPathRelation(){
+        StatementResult statementResult= Neo4jDriverUtil
+                .runStatementResult("MATCH (a)-[r]-(b) where a.CUSTOMER_ID='001611094560' and type(r)<>'PAY'  RETURN r LIMIT 300");
+        return Neo4jFormat.formatPathRelation(statementResult);
+    }
+
 
 
 }
