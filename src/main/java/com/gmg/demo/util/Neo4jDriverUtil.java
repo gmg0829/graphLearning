@@ -1,10 +1,12 @@
 package com.gmg.demo.util;
 
 import org.neo4j.driver.v1.*;
+import org.neo4j.driver.v1.types.Node;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
@@ -69,6 +71,23 @@ public class Neo4jDriverUtil {
         return list;
     }
 
+    public static CompletionStage<List<Map<String,Object>>> runAsync(String sql, Map<String,Object> parameter) {
+        Driver driver = Neo4jDriverUtil.getDriver();
+        try (Session session = driver.session()) {
+            return session.runAsync( sql, parameter)
+                    .thenCompose( cursor -> cursor.listAsync( record -> record.get( 0 ).asMap()) )
+                    .exceptionally( error ->
+                    {
+                        // query execution failed, print error and fallback to empty list of titles
+                        error.printStackTrace();
+                        return Collections.emptyList();
+                    } )
+                    .thenCompose( titles -> session.closeAsync().thenApply( ignore -> titles ) );
+        }
+    }
+
+
+
     public static List<Record> transactionRead(String sql) {
         Driver driver = Neo4jDriverUtil.getDriver();
         try (Session session = driver.session()) {
@@ -95,6 +114,7 @@ public class Neo4jDriverUtil {
         }
         return 0;
     }
+
 
 
 

@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author gmg
@@ -48,6 +49,20 @@ public class GraphController {
         List<Record> list= Neo4jDriverUtil
                 .runWithParameter("MATCH (a:CCustomer) where a.CUSTOMER_ID=$customerId return a",parameters);
         return Neo4jFormat.formatNode(list);
+    }
+
+    /**
+     * 异步获取单个节点
+     * @param customerId
+     * @return
+     */
+    @GetMapping("getAsyncSingleNode")
+    public  CompletionStage<List<Map<String,Object>>> getAsyncSingleNode(String customerId){
+        Map<String,Object> parameters = Collections.singletonMap( "customerId", customerId);
+
+        CompletionStage<List<Map<String,Object>>> list= Neo4jDriverUtil
+                .runAsync("MATCH (a:CCustomer) where a.CUSTOMER_ID=$customerId return a",parameters);
+        return list;
     }
 
     /**
