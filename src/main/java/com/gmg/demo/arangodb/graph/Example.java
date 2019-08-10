@@ -28,7 +28,7 @@ public class Example {
         String dbName = "mydb";
 
         // 创建顶点
-       // arangoDB.db(dbName).createCollection("v_user");
+     /*  arangoDB.db(dbName).createCollection("v_user");
 
         //创建边
         CollectionCreateOptions coptions = new CollectionCreateOptions();
@@ -90,7 +90,7 @@ public class Example {
         GraphCreateOptions goptions = new GraphCreateOptions();
         goptions.orphanCollections("myGraph");
 
-        arangoDB.db(dbName).createGraph("myGraph", edgeDefinitions, goptions);
+        arangoDB.db(dbName).createGraph("myGraph", edgeDefinitions, goptions);*/
 
         //使用AQL查询, 结果 (u3)-[is_father]->(u4)-[is_father]->(u5)
         String query = "FOR v,e,p IN 2 OUTBOUND 'v_user/u3' GRAPH 'myGraph' " +
