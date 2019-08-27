@@ -1,5 +1,7 @@
 package com.gmg.demo.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,6 @@ public class TigerGraphController {
         String response= restTemplate.getForObject("http://192.168.1.166:9000/query/social/a?p=Tom",String.class);
         return response;
     }
-
     @RequestMapping("postTigerGraph")
     public String postTigerGraph(){
         final HttpHeaders headers = new HttpHeaders();
@@ -39,6 +40,13 @@ public class TigerGraphController {
         final ResponseEntity<String> response = restTemplate.exchange("http://192.168.1.166:9000/graph/social", HttpMethod.POST, request, String.class);
         final String respString = response.getBody();
         return respString;
+    }
+
+    @RequestMapping("getRelationObject")
+    public String getRelationObject(String customerId){
+        JSONObject response= restTemplate.getForObject("http://192.168.1.166:9000/query/aml/getRelationObject?customerId="+customerId, JSONObject.class);
+        JSONArray jsonArray=response.getJSONArray("results");
+        return jsonArray.getJSONObject(0).toJSONString();
     }
 
 
