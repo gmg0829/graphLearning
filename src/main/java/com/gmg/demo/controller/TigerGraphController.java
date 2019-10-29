@@ -30,17 +30,19 @@ public class TigerGraphController {
         String response= restTemplate.getForObject("http://192.168.1.166:9000/query/social/a?p=Tom",String.class);
         return response;
     }
-    @RequestMapping("postTigerGraph")
-    public String postTigerGraph(){
+    @RequestMapping("postSignalTigerGraph")
+    public String postSignalTigerGraph(){
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(new MediaType[] { new MediaType("application",
                 "json", Charset.forName("UTF-8")) }));
         final HttpEntity<String> request = new HttpEntity<>("{\"vertices\":{\"person\":{\"gmg\":{\"name\":{\"value\":\"gmg\"},\"age\":{\"value\":12},\"gender\":{\"value\":\"1\"},\"state\":{\"value\":\"0\"}}}}}",headers);
         final ResponseEntity<String> response = restTemplate.exchange("http://192.168.1.166:9000/graph/social", HttpMethod.POST, request, String.class);
+        response.getStatusCode().value();
         final String respString = response.getBody();
         return respString;
     }
+
 
     @RequestMapping("getRelationObject")
     public String getRelationObject(String customerId){
@@ -48,6 +50,7 @@ public class TigerGraphController {
         JSONArray jsonArray=response.getJSONArray("results");
         return jsonArray.getJSONObject(0).toJSONString();
     }
+
 
 
 }
