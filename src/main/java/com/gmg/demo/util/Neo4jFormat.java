@@ -21,7 +21,7 @@ import java.util.*;
 public class Neo4jFormat {
 
     /**
-     * 格式化路径
+     * 格式化返回路径
      * @param result
      * @return
      */
