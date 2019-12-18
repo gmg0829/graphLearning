@@ -48,9 +48,10 @@ public class Neo4jFormat {
                         Map<String, Object> nodedatamap = new HashMap<String, Object>();
                         // 添加节点的属性
                         Map<String, Object> data1 = node.asMap();
-                        for (String key1 : data1.keySet()) {
+                        /*for (String key1 : data1.keySet()) {
                             nodedatamap.put(key1, data1.get(key1));
-                        }
+                        }*/
+                        nodedatamap.put("prop", data1);
                         nodedatamap.put("name", nodeid);
                         nodedatas.add(nodedatamap);
                     }
