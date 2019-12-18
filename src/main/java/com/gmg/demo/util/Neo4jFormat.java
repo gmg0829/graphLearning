@@ -62,9 +62,10 @@ public class Neo4jFormat {
                     for (Relationship relationship : relationships) {
                         // 添加关系的属性
                         Map<String, Object> data1 = relationship.asMap();
-                        for (String key1 : data1.keySet()) {
-                            shipdata.put(key1, data1.get(key1));
-                        }
+//                        for (String key1 : data1.keySet()) {
+//                            shipdata.put(key1, data1.get(key1));
+//                        }
+                        shipdata.put("prop",data1);
                         // 起始节点id
                         long source = relationship.startNodeId();
                         // 结束节点Id
@@ -140,9 +141,11 @@ public class Neo4jFormat {
                     shipdata.put("target", target);
                     // 添加关系的属性
                     Map<String, Object> relationProperties = relationship.asMap();
-                    for (String key1 : relationProperties.keySet()) {
+/*                    for (String key1 : relationProperties.keySet()) {
                         shipdata.put(key1, relationProperties.get(key1));
-                    }
+                    }*/
+                    shipdata.put("prop", relationProperties);
+
                     allrelationships.add(shipdata);
                 }
             }
